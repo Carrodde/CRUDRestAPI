@@ -21,7 +21,7 @@ async function addPlayer(req, res) {
 }
 
 //Function for retrieving all Players
-async function retrivePlayers(res) {
+async function retrievePlayers(res) {
   const players = await player.findAll();
   let result = players.map((player) => ({
     name: player.name,
@@ -33,5 +33,5 @@ async function retrivePlayers(res) {
 
 module.exports = {
   addPlayer,
-  retrivePlayers,
+  retrievePlayers,
 };
