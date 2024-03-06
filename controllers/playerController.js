@@ -1,5 +1,6 @@
 const { player } = require("../models");
 
+//Function to add a new player
 async function addPlayer(req, res) {
   const { name, jersey, position } = req.body;
   const existingPlayer = await player.findOne({
@@ -19,6 +20,18 @@ async function addPlayer(req, res) {
   return res.status(201).send("Player added!");
 }
 
+//Function for retrieving all Players
+async function retrivePlayers(res) {
+  const players = await player.findAll();
+  let result = players.map((player) => ({
+    name: player.name,
+    jersey: player.jersey,
+    position: player.position,
+  }));
+  res.json(result);
+}
+
 module.exports = {
   addPlayer,
+  retrivePlayers,
 };
