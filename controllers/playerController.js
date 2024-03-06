@@ -31,7 +31,25 @@ async function retrievePlayers(res) {
   res.json(result);
 }
 
+//Function for deleting players
+async function deletePlayer(req, res) {
+  const playerId = req.params.id;
+  try {
+    const playerDelete = await players.findOne({
+      where: { id: playerId },
+    });
+    if (!playerDelete) {
+      return res.status(404).send("Player does not exist");
+    }
+    await playerDelete.destroy();
+    res.status(201).send("Player deleted");
+  } catch (err) {
+    res.status(500).send("Server error: deleting user");
+  }
+}
+
 module.exports = {
   addPlayer,
   retrievePlayers,
+  deletePlayer,
 };
