@@ -48,8 +48,34 @@ async function deletePlayer(req, res) {
   }
 }
 
+//Function for updating playerinfo
+async function updatePlayer(req, res) {
+  const playerId = req.params.id;
+  const existingPlayer = await player.findOne({
+    where: { id: playerId },
+  });
+
+  if (!existingPlayer) {
+    res.status(404).send("Player does not exist");
+  }
+
+  const updatedPlayer = {
+    name: req.body.name,
+    jersey: req.body.jersey,
+    position: req.body.position,
+  };
+
+  try {
+    await existingPlayer.update(updatedPlayer);
+    res.status(201).send("Player has been updated");
+  } catch (err) {
+    res.status(500).send("Server Error: Failed to update player");
+  }
+}
+
 module.exports = {
   addPlayer,
   retrievePlayers,
   deletePlayer,
+  updatePlayer,
 };
