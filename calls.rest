@@ -1,13 +1,13 @@
 ### Get all players
-GET http://localhost:3000/getAll
+GET http://localhost:3000/getAll?sortBy=name&sortOrder=desc
 
 ### Add new player
 POST http://localhost:3000/addNew
 Content-Type: application/json; charset=utf-8
 
 {
-    "name":"Peter Forsberg",
-    "jersey": 21,
+    "name":"Mats Sundin",
+    "jersey": 13,
     "position":"Forward"
 }
 

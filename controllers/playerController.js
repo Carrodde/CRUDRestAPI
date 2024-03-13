@@ -1,4 +1,5 @@
 const { player } = require("../models");
+const { Op } = require("sequelize");
 
 //Function to add a new player
 async function addPlayer(req, res) {
@@ -22,13 +23,21 @@ async function addPlayer(req, res) {
 
 //Function for retrieving all Players
 async function retrievePlayers(req, res) {
-  const players = await player.findAll();
-  let result = players.map((player) => ({
-    name: player.name,
-    jersey: player.jersey,
-    position: player.position,
-  }));
-  res.json(result);
+  let sortBy = req.query.sortBy || "name";
+  let sortOrder = req.query.sortOrder || "asc";
+  const q = req.query.q || "";
+  const players = await player.findAll({
+    order: [[sortBy, sortOrder]],
+  });
+
+  const result = players.map((p) => {
+    return {
+      name: p.name,
+      jersey: p.jersey,
+      position: p.position,
+    };
+  });
+  return res.json(result);
 }
 
 //Function for deleting players
