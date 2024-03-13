@@ -21,7 +21,7 @@ async function addPlayer(req, res) {
 }
 
 //Function for retrieving all Players
-async function retrievePlayers(res) {
+async function retrievePlayers(req, res) {
   const players = await player.findAll();
   let result = players.map((player) => ({
     name: player.name,
@@ -35,7 +35,7 @@ async function retrievePlayers(res) {
 async function deletePlayer(req, res) {
   const playerId = req.params.id;
   try {
-    const playerDelete = await players.findOne({
+    const playerDelete = await player.findOne({
       where: { id: playerId },
     });
     if (!playerDelete) {

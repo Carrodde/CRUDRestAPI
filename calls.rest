@@ -1,0 +1,25 @@
+### Get all players
+GET http://localhost:3000/getAll
+
+### Add new player
+POST http://localhost:3000/addNew
+Content-Type: application/json; charset=utf-8
+
+{
+    "name":"Peter Forsberg",
+    "jersey": 21,
+    "position":"Forward"
+}
+
+### Update Player information
+POST http://localhost:3000/updatePlayer/1
+Content-Type: application/json; charset=utf-8
+
+{
+    "name":"Mats Sundin",
+    "jersey": 13,
+    "position": "Forward"
+}
+
+### Delete Player
+DELETE http://localhost:3000/deletePlayer/1
