@@ -21,22 +21,47 @@ async function addPlayer(req, res) {
   return res.status(201).send("Player added!");
 }
 
-//Function for retrieving all Players
+// Function for retrieving all Players with pagination and sorting
 async function retrievePlayers(req, res) {
   let sortBy = req.query.sortBy || "name";
   let sortOrder = req.query.sortOrder || "asc";
-  const q = req.query.q || "";
-  const players = await player.findAll({
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+
+  // Calculate startIndex and endIndex for pagination
+  const startIndex = (page - 1) * limit;
+  const endIndex = page * limit;
+
+  // Query database with sorting and pagination parameters
+  const players = await player.findAndCountAll({
     order: [[sortBy, sortOrder]],
+    offset: startIndex,
+    limit: limit,
   });
 
-  const result = players.map((p) => {
-    return {
-      name: p.name,
-      jersey: p.jersey,
-      position: p.position,
-    };
-  });
+  // Construct result object with pagination information
+  const totalPages = Math.ceil(players.count / limit);
+  const hasNextPage = page < totalPages;
+  const hasPreviousPage = page > 1;
+
+  const result = {
+    total: players.count,
+    page: page,
+    pageSize: limit,
+    totalPages: totalPages,
+    sortBy: sortBy,
+    sortOrder: sortOrder,
+    hasNextPage: hasNextPage,
+    hasPreviousPage: hasPreviousPage,
+    data: players.rows.map((p) => {
+      return {
+        name: p.name,
+        jersey: p.jersey,
+        position: p.position,
+      };
+    }),
+  };
+
   return res.json(result);
 }
 
