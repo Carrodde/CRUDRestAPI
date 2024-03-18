@@ -23,46 +23,53 @@ async function addPlayer(req, res) {
 
 // Function for retrieving all Players with pagination and sorting
 async function retrievePlayers(req, res) {
-  let sortBy = req.query.sortBy || "name";
-  let sortOrder = req.query.sortOrder || "asc";
-  const page = parseInt(req.query.page) || 1;
-  const limit = parseInt(req.query.limit) || 10;
+  try {
+    let name = req.query.search || "";
+    let sortBy = req.query.sortBy || "name";
+    let sortOrder = req.query.sortOrder || "asc";
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
 
-  // Calculate startIndex and endIndex for pagination
-  const startIndex = (page - 1) * limit;
-  const endIndex = page * limit;
+    const startIndex = (page - 1) * limit;
 
-  // Query database with sorting and pagination parameters
-  const players = await player.findAndCountAll({
-    order: [[sortBy, sortOrder]],
-    offset: startIndex,
-    limit: limit,
-  });
+    const players = await player.findAndCountAll({
+      where: {
+        name: {
+          [Op.like]: "%" + name + "%",
+        },
+      },
+      order: [[sortBy, sortOrder]],
+      offset: startIndex,
+      limit: limit,
+    });
 
-  // Construct result object with pagination information
-  const totalPages = Math.ceil(players.count / limit);
-  const hasNextPage = page < totalPages;
-  const hasPreviousPage = page > 1;
+    const totalPages = Math.ceil(players.count / limit);
+    const nextPage = page < totalPages;
+    const previousPage = page > 1;
 
-  const result = {
-    total: players.count,
-    page: page,
-    pageSize: limit,
-    totalPages: totalPages,
-    sortBy: sortBy,
-    sortOrder: sortOrder,
-    hasNextPage: hasNextPage,
-    hasPreviousPage: hasPreviousPage,
-    data: players.rows.map((p) => {
-      return {
-        name: p.name,
-        jersey: p.jersey,
-        position: p.position,
-      };
-    }),
-  };
+    const result = {
+      total: players.count,
+      page: page,
+      pageSize: limit,
+      totalPages: totalPages,
+      sortBy: sortBy,
+      sortOrder: sortOrder,
+      nextPage: nextPage,
+      previousPage: previousPage,
+      data: players.rows.map((p) => {
+        return {
+          name: p.name,
+          jersey: p.jersey,
+          position: p.position,
+        };
+      }),
+    };
 
-  return res.json(result);
+    return res.json(result);
+  } catch (error) {
+    console.error("Error retrieving players:", error);
+    res.status(500).json({ error: "Server error, failed to get players" });
+  }
 }
 
 //Function for deleting players
