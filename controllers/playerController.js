@@ -10,7 +10,7 @@ async function addPlayer(req, res) {
     },
   });
   if (existingPlayer) {
-    return res.status(401).send("Player already exist");
+    return res.status(401).send({ error: "Player already exist" });
   } else {
     await player.create({
       name: name,
@@ -18,7 +18,7 @@ async function addPlayer(req, res) {
       position: position,
     });
   }
-  return res.status(201).send("Player added!");
+  return res.status(201).send({ message: "Player added!" });
 }
 
 // Function for retrieving all Players with pagination and sorting
@@ -29,8 +29,7 @@ async function retrievePlayers(req, res) {
     let sortOrder = req.query.sortOrder || "asc";
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 25;
-
-    const startIndex = (page - 1) * limit;
+    const offset = parseInt(req.query.offset) || 1;
 
     const players = await player.findAndCountAll({
       where: {
@@ -39,7 +38,7 @@ async function retrievePlayers(req, res) {
         },
       },
       order: [[sortBy, sortOrder]],
-      offset: startIndex,
+      offset: offset,
       limit: limit,
     });
 
