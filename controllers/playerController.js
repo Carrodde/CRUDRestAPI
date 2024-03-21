@@ -25,7 +25,7 @@ async function addPlayer(req, res) {
 async function retrievePlayers(req, res) {
   try {
     let name = req.query.search || "";
-    let sortBy = req.query.sortBy || "name";
+    let sortBy = req.query.sortBy || "id";
     let sortOrder = req.query.sortOrder || "asc";
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;

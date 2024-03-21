@@ -1,13 +1,14 @@
 ### Get all players
-GET http://localhost:3000/getAll?search=Forsberg&sortBy=name&sortOrder=asc&page=1&limit=2
+GET http://localhost:3000/getAll
 
+//?search=Forsberg&sortBy=name&sortOrder=asc&page=1&limit=2
 ### Add new player
 POST http://localhost:3000/addNew
 Content-Type: application/json; charset=utf-8
 
 {
-    "name":"Mats Sundin",
-    "jersey": 13,
+    "name":"Fantom en",
+    "jersey": 14,
     "position":"Forward"
 }
 

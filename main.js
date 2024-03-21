@@ -19,7 +19,7 @@ app.use(
 
 app.get("/getAll", playerController.retrievePlayers);
 
-app.post("/addNew", playerValidator, playerController.addPlayer);
+app.post("/addNew", playerController.addPlayer);
 
 app.post("/updatePlayer/:id", playerValidator, playerController.updatePlayer);
 
