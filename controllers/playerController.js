@@ -28,7 +28,7 @@ async function retrievePlayers(req, res) {
     let sortBy = req.query.sortBy || "id";
     let sortOrder = req.query.sortOrder || "asc";
     const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 10;
+    const limit = parseInt(req.query.limit) || 25;
 
     const startIndex = (page - 1) * limit;
 
