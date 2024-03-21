@@ -58,6 +58,7 @@ async function retrievePlayers(req, res) {
       previousPage: previousPage,
       data: players.rows.map((p) => {
         return {
+          id: p.id,
           name: p.name,
           jersey: p.jersey,
           position: p.position,
