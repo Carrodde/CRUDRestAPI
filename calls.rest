@@ -1,0 +1,26 @@
+### Get all players
+GET http://localhost:3000/getAll
+
+//?search=Forsberg&sortBy=name&sortOrder=asc&page=1&limit=2
+### Add new player
+POST http://localhost:3000/addNew
+Content-Type: application/json; charset=utf-8
+
+{
+    "name":"Fantom Eng",
+    "jersey": 14,
+    "position":"Forward"
+}
+
+### Update Player information
+POST http://localhost:3000/updatePlayer/10
+Content-Type: application/json; charset=utf-8
+
+{
+    "name":"Kan Tig",
+    "jersey": "14",
+    "position": "Forward"
+}
+
+### Delete Player
+DELETE http://localhost:3000/deletePlayer/1

@@ -5,6 +5,9 @@ const cors = require("cors");
 const migrationhelper = require("./migrationhelper");
 const { sequelize, player } = require("./models");
 
+const playerController = require("./controllers/playerController");
+const { playerValidator } = require("./validators/playerValidator");
+
 app.use(express.json());
 
 app.use(
@@ -13,6 +16,14 @@ app.use(
     credentials: true,
   })
 );
+
+app.get("/getAll", playerController.retrievePlayers);
+
+app.post("/addNew", playerValidator, playerController.addPlayer);
+
+app.post("/updatePlayer/:id", playerValidator, playerController.updatePlayer);
+
+app.delete("/deletePlayer/:id", playerController.deletePlayer);
 
 app.listen(port, async () => {
   await migrationhelper.migrate();
